@@ -28,7 +28,7 @@ function checkIfPostUnique(postsData, newPost) {
 
 const getLevels = async () => {
     const browser = await puppeteer.launch({
-        headless: false,
+        headless: true,
         defaultViewport: null,
     });
 

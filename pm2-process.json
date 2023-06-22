@@ -1,0 +1,10 @@
+{
+    "script" : "app.js",
+    "watch": true,
+    "ignore_watch" : ["node_modules", "data", ".git", ".vscode", "actionlog.txt", "logs"],
+    "watch_options" : {
+        "followSymlinks" : false
+    },
+    "name" : "levels"
+}
+
