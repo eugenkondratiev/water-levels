@@ -10,7 +10,7 @@ const fetchLevels = require("./puppeteer");
 
 // Start the scraping
 
-// fetchLevels().catch(err => { console.log("MAIN ERROR  - ", err) });
+fetchLevels().catch(err => { console.log("MAIN ERROR  - ", err) });
 
 module.exports = function () {
     const schGetPlayers = schedule.scheduleJob(ruleEveryDay, async function () {

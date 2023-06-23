@@ -41,7 +41,7 @@ const getLevels = async () => {
     const postsList = await page.$$(allPostsSeletor)
     // const postsList = await page.$$eval(allPostsSeletor, divs => divs)
     const postsQuantity = postsList.length
-    console.log("POST LISTS - ", postsQuantity, postsList);
+    console.log("POST LISTS Quantity- ", postsQuantity);
 
     let postsData = [];
 
@@ -50,18 +50,7 @@ const getLevels = async () => {
             console.log("posts = ", i, postsList[i]);
             postsList[i].click()
             await sleep(1000)
-            // const e1 = await page.$eval(popupSelector, d => d.textContent)
-            // const e2 = await page.$eval(popupSelector, d => d.outerHTML)
-            // const e3 = await page.$eval(popupSelector, async d => {
-            //     const post = await d.$eval('div[text="bar"] b', x => x.textContent)
-            //     console.log("post", post);
-            //     return d.innerHTML
 
-            // }
-            // )
-
-
-            // }
             let isTempExist = null
 
             const popup = await page.$(popupSelector)
@@ -88,7 +77,7 @@ const getLevels = async () => {
                 // temperaturen
 
             }
-            console.log(levelData, "\n\n\n", e3);
+            console.log("levelData -", levelData, "\n\n\n", e3);
 
 
             // console.log(e1, "\n\n\n", e2, "\n\n\n", e3);
@@ -97,9 +86,9 @@ const getLevels = async () => {
                 upsertRecordToMongo(formMongoRecord(levelData))
 
             }
-            await page.$eval(popupSelector, div => {
-                console.log(div.textContent);
-            })
+            // await page.$eval(popupSelector, div => {
+            //     console.log(div.textContent);
+            // })
             await sleep(1000)
         } catch (error) {
             console.log("one post error", error);
@@ -108,14 +97,14 @@ const getLevels = async () => {
 
     console.log(" postsData  - ", postsData);
     console.log(" postsData Length - ", postsData.length);
-    fs.writeFile("./data/postList.json", JSON.stringify(postsData, null, " "), 'utf8', (err) => { if (err) console.log("error postList file writing ", err) })
+    fs.writeFile(`./data/postList_${new Date(Date.now()).toLocaleDateString()}.json`, JSON.stringify(postsData, null, " "), 'utf8', (err) => { if (err) console.log("error postList file writing ", err) })
 
 
-    const riversList = formRiversList(postsData)
+    const riversList = await formRiversList(postsData)
     await upsertRiversToMongo(riversList)
 
 
-    fs.writeFile("./data/riversList.json", JSON.stringify(riversList, null, " "), 'utf8', (err) => { if (err) console.log("error riversList. file writing ", err)})
+    fs.writeFile(`./data/riversList_${new Date(Date.now()).toLocaleDateString()}.json`, JSON.stringify(riversList, null, " "), 'utf8', (err) => { if (err) console.log("error riversList. file writing ", err) })
 
 
 

@@ -43,9 +43,16 @@ const http = require("http")
 const url = require('url')
 
 const server = http.createServer(async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', "*")
+    res.setHeader('Access-Control-Allow-Headers', "*")
+    res.setHeader('Access-Control-Request-Method', "*")
+
+
     if ((req.url === "/api" || req.url === "/api/rivers") && req.method === "GET") {
         try {
             const posts = await require("./controller/read-rivers-list")({ _id: -1 })
+            res.setHeader('Access-Control-Allow-Origin', "*")
+
             res.writeHead(200, { "Content-Type": "application/json" })
             res.end(JSON.stringify(posts, null, " "))
 
@@ -64,6 +71,7 @@ const server = http.createServer(async (req, res) => {
             console.log(" post, river ", post, river)
 
             const rlt = await require("./controller/read-post-data")({ post: post, river: river })
+            res.setHeader('Access-Control-Allow-Origin', "*")
 
             res.writeHead(200, { "Content-Type": "application/json" })
             res.end(JSON.stringify(rlt, null, " "))
