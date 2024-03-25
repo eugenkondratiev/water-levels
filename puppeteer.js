@@ -9,7 +9,7 @@ const popupSelector = "#attns_map  div.leaflet-popup-pane div.leaflet-popup-cont
 const firstPostSeletor = "#attns_map > div.leaflet-pane.leaflet-map-pane > div.leaflet-pane.leaflet-marker-pane > div:nth-child(1) > div"
 const allPostsSeletor = "#attns_map > div.leaflet-pane.leaflet-map-pane > div.leaflet-pane.leaflet-marker-pane  div.hmhm"
 const temperaturenSelector = "#attns_map > div.leaflet-pane.leaflet-map-pane > div.leaflet-pane.leaflet-popup-pane > div > div.leaflet-popup-content-wrapper > div > div:nth-child(6) > b"
-
+const closePopupSelector = "a.leaflet-popup-close-button"
 const sleep = (ms) => { return new Promise(res => setTimeout(res, ms)) }
 
 
@@ -21,7 +21,7 @@ const formRiversList = require("./utils/rivers-set-object")
 
 function checkIfPostUnique(postsData, newPost) {
     if (!Array.isArray(postsData)) return false
-    if (postsData.some(p => p.post === newPost.post && p.point === newPost.point)) return false
+    if (postsData.some(p => p.post === newPost.post && p.river === newPost.river)) return false
     return true
 }
 
@@ -49,9 +49,7 @@ const getLevels = async () => {
         try {
             console.log("posts = ", i, postsList[i]);
             postsList[i].click()
-            await sleep(1000)
-
-            let isTempExist = null
+            await sleep(2000)
 
             const popup = await page.$(popupSelector)
             const post = await popup.$eval('div:nth-child(1) > b', x => x.textContent)
@@ -59,13 +57,6 @@ const getLevels = async () => {
             const dt = await popup.$eval('div:nth-child(3) em', x => x.textContent)
             const level = await popup.$eval('div:nth-child(4) b', x => x.textContent)
             const levelChange = await popup.$eval('div:nth-child(5) b', x => x.textContent)
-            // try {
-
-            //     isTempExist = await page.$(temperaturenSelector)
-            // } catch (error) {
-
-            // }
-            // const temperaturen = isTempExist ? await popup.$eval(temperaturenSelector, x => x.textContent) : null
 
             const e3 = await page.$eval(popupSelector, div => div.innerHTML)
             const levelData = {
@@ -80,16 +71,15 @@ const getLevels = async () => {
             console.log("levelData -", levelData, "\n\n\n", e3);
 
 
-            // console.log(e1, "\n\n\n", e2, "\n\n\n", e3);
             if (checkIfPostUnique(postsData, levelData)) {
                 postsData.push(levelData)
                 upsertRecordToMongo(formMongoRecord(levelData))
 
             }
-            // await page.$eval(popupSelector, div => {
-            //     console.log(div.textContent);
-            // })
-            await sleep(1000)
+
+            const popupClose = await page.$(closePopupSelector)
+            popupClose.click() 
+            await sleep(2000)
         } catch (error) {
             console.log("one post error", error);
         }
