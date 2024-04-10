@@ -87,14 +87,14 @@ const getLevels = async () => {
 
     console.log(" postsData  - ", postsData);
     console.log(" postsData Length - ", postsData.length);
-    fs.writeFile(`./data/postList_${new Date(Date.now()).toLocaleDateString()}.json`, JSON.stringify(postsData, null, " "), 'utf8', (err) => { if (err) console.log("error postList file writing ", err) })
+    fs.writeFile(`D:/DB/data/postList_${new Date(Date.now()).toLocaleDateString()}.json`, JSON.stringify(postsData, null, " "), 'utf8', (err) => { if (err) console.log("error postList file writing ", err) })
 
 
     const riversList = await formRiversList(postsData)
     await upsertRiversToMongo(riversList)
 
 
-    fs.writeFile(`./data/riversList_${new Date(Date.now()).toLocaleDateString()}.json`, JSON.stringify(riversList, null, " "), 'utf8', (err) => { if (err) console.log("error riversList. file writing ", err) })
+    fs.writeFile(`D:/DB/data/riversList_${new Date(Date.now()).toLocaleDateString()}.json`, JSON.stringify(riversList, null, " "), 'utf8', (err) => { if (err) console.log("error riversList. file writing ", err) })
 
 
 
